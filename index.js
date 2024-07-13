@@ -2,6 +2,7 @@ import express from "express"
 import mongoose from "mongoose";
 import apiRoutes from "../server/Routes/api.js"
 import bodyParser from "body-parser";
+import dotenv from "dotenv"
 import { Server } from "socket.io";
 import cors from "cors";
 import { createServer } from 'node:http';
@@ -16,7 +17,7 @@ const io = new Server(server,{
         credentials:true
     }
 });
-
+dotenv.config()
 app.use(express.json());
 app.use(bodyParser.json({limit:"30mb" ,extended: "true"}));
 app.use(bodyParser.urlencoded({limit:"30mb" ,extended: "true"}));
@@ -72,7 +73,7 @@ io.on('connection', (socket) => {
 
 
 
-const CONNECT_URL="mongodb+srv://admin-mayank:123@cluster0.a6pem.mongodb.net/ChatApp?retryWrites=true&w=majority";
+const CONNECT_URL=process.env.MONGO_URL;
 
 mongoose.connect(CONNECT_URL)
 .then(()=>server.listen(1234,()=>console.log("connect succesful")))
